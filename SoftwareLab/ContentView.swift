@@ -26,6 +26,9 @@ struct ContentView: View {
     @State private var isLoginMode = true
     @State private var isLoading = false
     @State private var loginSuccess = false
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationView {
@@ -81,6 +84,9 @@ struct ContentView: View {
                         .padding(.horizontal, 30)
                 }
                 .padding(.top, 30)
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Bilgi"), message: Text(alertMessage), dismissButton: .default(Text("Tamam")))
+                }
                 
                 if isLoading {
                     ProgressView()
@@ -114,7 +120,14 @@ struct ContentView: View {
     }
     
     private func login() {
-        guard let url = URL(string: "http://localhost:3000/login") else { return }
+        guard !email.isEmpty, !password.isEmpty else {
+            alertMessage = "Lütfen tüm alanları doldurun."
+            showAlert = true
+            isLoading = false
+            return
+        }
+        
+        guard let url = URL(string: "http://localhost:8000/login") else { return }
         
         let parameters: [String: Any] = [
             "email": email,
@@ -128,20 +141,23 @@ struct ContentView: View {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
         } catch {
-            print("JSON verisi oluşturulamadı: \(error)")
+            alertMessage = "JSON verisi oluşturulamadı: \(error)"
+            showAlert = true
             isLoading = false
             return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Giriş hatası: \(error.localizedDescription)")
+                alertMessage = "Giriş hatası: \(error.localizedDescription)"
+                showAlert = true
                 isLoading = false
                 return
             }
             
             guard let data = data else {
-                print("Giriş sırasında veri alınamadı.")
+                alertMessage = "Giriş sırasında veri alınamadı."
+                showAlert = true
                 isLoading = false
                 return
             }
@@ -150,18 +166,26 @@ struct ContentView: View {
                httpResponse.statusCode == 200 {
                 DispatchQueue.main.async {
                     userSession.login(username: username, email: email)
-                    loginSuccess = true
+                    loginSuccess = true // Başarı durumunda doğrudan ProfileView'a yönlendirir
                     isLoading = false
                 }
             } else {
-                print("Giriş başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")")
+                alertMessage = "Giriş başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")"
+                showAlert = true
                 isLoading = false
             }
         }.resume()
     }
     
     private func register() {
-        guard let url = URL(string: "http://localhost:3000/register") else { return }
+        guard !email.isEmpty, !password.isEmpty, !username.isEmpty else {
+            alertMessage = "Lütfen tüm alanları doldurun."
+            showAlert = true
+            isLoading = false
+            return
+        }
+        
+        guard let url = URL(string: "http://localhost:8000/register") else { return }
         
         let parameters: [String: Any] = [
             "email": email,
@@ -176,20 +200,23 @@ struct ContentView: View {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
         } catch {
-            print("JSON verisi oluşturulamadı: \(error)")
+            alertMessage = "JSON verisi oluşturulamadı: \(error)"
+            showAlert = true
             isLoading = false
             return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Kayıt hatası: \(error.localizedDescription)")
+                alertMessage = "Kayıt hatası: \(error.localizedDescription)"
+                showAlert = true
                 isLoading = false
                 return
             }
             
             guard let data = data else {
-                print("Kayıt sırasında veri alınamadı.")
+                alertMessage = "Kayıt sırasında veri alınamadı."
+                showAlert = true
                 isLoading = false
                 return
             }
@@ -198,13 +225,15 @@ struct ContentView: View {
                httpResponse.statusCode == 201 {
                 DispatchQueue.main.async {
                     userSession.login(username: username, email: email)
-                    loginSuccess = true
+                    loginSuccess = true // Başarı durumunda doğrudan ProfileView'a yönlendirir
                     isLoading = false
                 }
             } else {
-                print("Kayıt başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")")
+                alertMessage = "Kayıt başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")"
+                showAlert = true
                 isLoading = false
             }
         }.resume()
     }
 }
+
