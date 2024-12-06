@@ -111,7 +111,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 40)
                 
-                NavigationLink(destination: ProfileView().environmentObject(userSession), isActive: $loginSuccess) {
+                NavigationLink(destination: FeaturedView().environmentObject(userSession), isActive: $loginSuccess) {
                     EmptyView()
                 }
             }
@@ -165,8 +165,8 @@ struct ContentView: View {
             if let httpResponse = response as? HTTPURLResponse,
                httpResponse.statusCode == 200 {
                 DispatchQueue.main.async {
-                    userSession.login(username: username, email: email)
-                    loginSuccess = true // Başarı durumunda doğrudan ProfileView'a yönlendirir
+                    userSession.login(username: self.username, email: email)
+                    loginSuccess = true
                     isLoading = false
                 }
             } else {
@@ -224,8 +224,8 @@ struct ContentView: View {
             if let httpResponse = response as? HTTPURLResponse,
                httpResponse.statusCode == 201 {
                 DispatchQueue.main.async {
-                    userSession.login(username: username, email: email)
-                    loginSuccess = true // Başarı durumunda doğrudan ProfileView'a yönlendirir
+                    userSession.login(username: self.username, email: email)
+                    loginSuccess = true
                     isLoading = false
                 }
             } else {
@@ -236,4 +236,8 @@ struct ContentView: View {
         }.resume()
     }
 }
-
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}

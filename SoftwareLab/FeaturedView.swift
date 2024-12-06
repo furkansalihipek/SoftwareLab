@@ -1,57 +1,54 @@
 import SwiftUI
 
 struct FeaturedView: View {
+    let javascriptVideos = [
+        "https://www.youtube.com/embed/8A7RWDgkXgg",
+        "https://www.youtube.com/embed/pl8W3ypHmbk",
+        "https://www.youtube.com/embed/BVNsL2UiDXg"
+    ]
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Text("Öne Çıkanlar")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding()
-
-                Text("Sıfırdan İleri Düzey JavaScript")
-                    .font(.title2)
-                    .padding(.leading)
-
-                Image("featuredImage") // Resim eklemek için
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: 200)
-                    .clipped()
-                
-                Text("Kursu İncele")
-                    .font(.title3)
-                    .padding(.leading)
-
-                // Kurslar bölümü
+        NavigationView {
+            ScrollView {
                 VStack(alignment: .leading) {
-                    Text("JavaScript")
-                        .font(.title)
+                    Text("Öne Çıkanlar")
+                        .font(.largeTitle)
                         .bold()
+                        .padding()
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            CourseCardView(title: "JavaScript'e Başlangıç", imageName: "jsBeginner")
-                            CourseCardView(title: "İleri Seviye JavaScript", imageName: "jsAdvanced")
+                    Text("Sıfırdan İleri Düzey JavaScript")
+                        .font(.title2)
+                        .padding(.leading)
+
+                    Image("banner")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 200)
+                        .clipped()
+
+                    Text("Kursu İncele")
+                        .font(.title3)
+                        .padding(.leading)
+                        .foregroundColor(Color.blue)
+
+                    VStack(alignment: .leading) {
+                        Text("JavaScript")
+                            .font(.title)
+                            .bold()
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                NavigationLink(destination: CourseDetailView(courseTitle: "JavaScript'e Başlangıç", videos: javascriptVideos)) {
+                                    CourseCardView(title: "JavaScript'e Başlangıç", imageName: "java_script_gorsel")
+                                }
+                                NavigationLink(destination: CourseDetailView(courseTitle: "İleri Seviye JavaScript", videos: javascriptVideos)) {
+                                    CourseCardView(title: "İleri Seviye JavaScript", imageName: "ileriseviyejs")
+                                }
+                            }
                         }
                     }
+                    .padding(.leading)
                 }
-                .padding(.leading)
-
-                // Python kursları
-                VStack(alignment: .leading) {
-                    Text("Python")
-                        .font(.title)
-                        .bold()
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            CourseCardView(title: "Python'a Başlangıç", imageName: "pythonBeginner")
-                            CourseCardView(title: "İleri Seviye Python", imageName: "pythonAdvanced")
-                        }
-                    }
-                }
-                .padding(.leading)
             }
         }
     }
@@ -63,7 +60,7 @@ struct CourseCardView: View {
 
     var body: some View {
         VStack {
-            Image(imageName) // Görselin adını burada belirtin
+            Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 150, height: 150)
@@ -74,7 +71,6 @@ struct CourseCardView: View {
                 .padding(.top, 5)
             
             Button(action: {
-                // Kursu incele butonuna tıklanma olayı
             }) {
                 Text("Kursu İncele")
                     .font(.subheadline)
@@ -90,7 +86,9 @@ struct CourseCardView: View {
     }
 }
 
-#Preview {
-    FeaturedView()
+struct FeaturedView_Previews: PreviewProvider {
+    static var previews: some View {
+        FeaturedView()
+    }
 }
 
