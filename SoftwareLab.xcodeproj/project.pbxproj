@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FC1F13B72D02F7DD001247D2 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FC1F13B62D02F7DD001247D2 /* ConfettiSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FC90ED952CC9178A009B7256 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC1F13B72D02F7DD001247D2 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = SoftwareLab;
 			packageProductDependencies = (
+				FC1F13B62D02F7DD001247D2 /* ConfettiSwiftUI */,
 			);
 			productName = SoftwareLab;
 			productReference = FC90ED842CC91788009B7256 /* SoftwareLab.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = FC90ED7B2CC91788009B7256;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FC1F13B42D02F52A001247D2 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FC90ED852CC91788009B7256 /* Products */;
 			projectDirPath = "";
@@ -558,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC1F13B42D02F52A001247D2 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC1F13B62D02F7DD001247D2 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC1F13B42D02F52A001247D2 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FC90ED7C2CC91788009B7256 /* Project object */;
 }

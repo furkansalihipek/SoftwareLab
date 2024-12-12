@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var userSession: UserSession
-    
+
     var body: some View {
         VStack {
             headerView
@@ -29,7 +28,7 @@ struct ProfileView: View {
     }
     
     private var userInfo: some View {
-        Text("Merhaba, \(userSession.username)")
+        Text("Merhaba, John")
             .font(.title)
             .padding(.top, 10)
     }
@@ -37,8 +36,8 @@ struct ProfileView: View {
     private var contentForm: some View {
         Form {
             Section(header: Text("Kullanıcı Bilgileri")) {
-                userInfoRow(imageName: "person", text: userSession.username)
-                userInfoRow(imageName: "envelope", text: userSession.email)
+                userInfoRow(imageName: "person", text: "John")
+                userInfoRow(imageName: "envelope", text: "john@example.com")
             }
             
             Section(header: Text("İçerik")) {
@@ -66,3 +65,10 @@ struct ProfileView: View {
     }
 }
 
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}

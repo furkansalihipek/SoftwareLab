@@ -111,7 +111,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 40)
                 
-                NavigationLink(destination: FeaturedView().environmentObject(userSession), isActive: $loginSuccess) {
+                NavigationLink(destination: HomePageView().environmentObject(userSession), isActive: $loginSuccess) {
                     EmptyView()
                 }
             }
