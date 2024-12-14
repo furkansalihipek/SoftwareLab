@@ -1,0 +1,24 @@
+# Node.js modülleri
+node_modules/
+
+# Ortam değişkenleri
+.env
+
+# IDE ve sistem dosyaları
+.DS_Store
+.vscode/
+
+# Log dosyaları
+*.log
+
+# NPM debug dosyaları
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Üretilen dosyalar (opsiyonel)
+dist/
+build/
+
+# Temp dosyaları
+*.tmp
