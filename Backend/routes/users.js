@@ -8,13 +8,11 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
-  // Eksik alan kontrolü
   if (!username || !email || !password) {
     return res.status(400).json({ message: 'Tüm alanlar zorunludur.' });
   }
 
   try {
-    // Email veya username'in benzersiz olduğundan emin olun
     const existingUser = await User.findOne({ 
       $or: [{ email }, { username }] 
     });
@@ -23,7 +21,6 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email veya kullanıcı adı zaten kullanılıyor.' });
     }
 
-    // Yeni kullanıcı oluştur
     const newUser = new User({ username, email, password });
     await newUser.save();
 
@@ -34,30 +31,24 @@ router.post('/register', async (req, res) => {
   }
 });
 
-
-
 // Kullanıcı Giriş (Login)
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  // Eksik alan kontrolü
   if (!email || !password) {
     return res.status(400).json({ message: 'Email ve şifre zorunludur.' });
   }
 
   try {
-    // Kullanıcıyı email üzerinden ara
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Geçersiz email veya şifre.' });
     }
 
-    // Şifre doğrulama
     if (user.password !== password) {
       return res.status(400).json({ message: 'Geçersiz email veya şifre.' });
     }
 
-    // JWT token oluştur
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ message: 'Giriş başarılı', token });
@@ -66,7 +57,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Giriş işlemi sırasında bir hata oluştu.' });
   }
 });
-
 
 router.post("/complete-task", async (req, res) => {
   const { userId, taskId } = req.body;
