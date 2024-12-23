@@ -4,16 +4,19 @@ class UserSession: ObservableObject {
     @Published var isLoggedIn = false
     @Published var username: String = ""
     @Published var email: String = ""
+    @Published var token: String? = nil
     
-    func login(username: String, email: String) {
+    func login(username: String, email: String, token: String) {
         self.username = username
         self.email = email
+        self.token = token
         self.isLoggedIn = true
     }
     
     func logout() {
         self.username = ""
         self.email = ""
+        self.token = nil
         self.isLoggedIn = false
     }
 }
@@ -115,7 +118,7 @@ struct ContentView: View {
                     EmptyView()
                 }
             }
-            .navigationBarHidden(true)
+            .navigationBarHidden(false)
         }
     }
     
@@ -127,7 +130,7 @@ struct ContentView: View {
             return
         }
         
-        guard let url = URL(string: "http://localhost:8000/login") else { return }
+        guard let url = URL(string: "http://localhost:3000/users/login") else { return }
         
         let parameters: [String: Any] = [
             "email": email,
@@ -162,20 +165,34 @@ struct ContentView: View {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse,
-               httpResponse.statusCode == 200 {
-                DispatchQueue.main.async {
-                    userSession.login(username: self.username, email: email)
-                    loginSuccess = true
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    print("JSON yanıt: \(json)")
+
+                    if let token = json["token"] as? String, let username = json["username"] as? String {
+                        DispatchQueue.main.async {
+                            userSession.login(username: username, email: self.email, token: token)
+                            loginSuccess = true
+                            isLoading = false
+                        }
+                    } else {
+                        alertMessage = "Giriş başarısız. Token veya kullanıcı adı alınamadı."
+                        showAlert = true
+                        isLoading = false
+                    }
+                } else {
+                    alertMessage = "Yanıt işleme hatası: Yanıt JSON formatında değil."
+                    showAlert = true
                     isLoading = false
                 }
-            } else {
-                alertMessage = "Giriş başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")"
+            } catch {
+                alertMessage = "Yanıt işleme hatası: \(error.localizedDescription)"
                 showAlert = true
                 isLoading = false
             }
         }.resume()
     }
+
     
     private func register() {
         guard !email.isEmpty, !password.isEmpty, !username.isEmpty else {
@@ -185,7 +202,7 @@ struct ContentView: View {
             return
         }
         
-        guard let url = URL(string: "http://localhost:8000/register") else { return }
+        guard let url = URL(string: "http://localhost:3000/users/register") else { return }
         
         let parameters: [String: Any] = [
             "email": email,
@@ -221,23 +238,43 @@ struct ContentView: View {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse,
-               httpResponse.statusCode == 201 {
-                DispatchQueue.main.async {
-                    userSession.login(username: self.username, email: email)
-                    loginSuccess = true
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Backend Yanıtı: \(jsonString)")
+            }
+
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    print("JSON yanıt: \(json)")
+
+                    if let token = json["token"] as? String {
+                        DispatchQueue.main.async {
+                            userSession.login(username: self.username, email: self.email, token: token)
+                            loginSuccess = true
+                            isLoading = false
+                        }
+                    } else {
+                        alertMessage = "Kayıt başarısız. Token alınamadı."
+                        showAlert = true
+                        isLoading = false
+                    }
+                } else {
+                    alertMessage = "Yanıt işleme hatası: Yanıt JSON formatında değil."
+                    showAlert = true
                     isLoading = false
                 }
-            } else {
-                alertMessage = "Kayıt başarısız. Sunucu yanıtı: \(String(data: data, encoding: .utf8) ?? "Veri okunamadı")"
+            } catch {
+                alertMessage = "Yanıt işleme hatası: \(error.localizedDescription)"
                 showAlert = true
                 isLoading = false
             }
         }.resume()
     }
 }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(UserSession())
     }
 }
+

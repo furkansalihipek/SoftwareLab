@@ -11,10 +11,19 @@ struct FirstPartView: View {
     var body: some View {
         ZStack {
             VStack {
-                Text("Bölüm 1")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top, 20)
+                HStack {
+                    Text("Bölüm 1")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.top, 20)
+                    
+                    Text("Puan :")
+                        .padding(.top, 25)
+                        .padding(.leading, 10)
+                        .offset(x: 50)
+                        .font(.headline)
+                        
+                }
 
                 Text("Görev: console.log kullanarak eve bir isim verin")
                     .font(.title2)
@@ -102,4 +111,3 @@ struct FirstPartView_Previews: PreviewProvider {
         FirstPartView(isFirstPartComplete: .constant(false))
     }
 }
-

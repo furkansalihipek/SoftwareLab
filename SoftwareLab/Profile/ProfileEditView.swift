@@ -1,10 +1,7 @@
 import SwiftUI
 
 struct ProfileEditView: View {
-    @State private var username = "John"
-    @State private var email = "example@gmail.com"
-    @State private var phoneNumber = "+14987889999"
-    @State private var password = "evFTbyVVCd"
+    @EnvironmentObject var userSession: UserSession
     
     var body: some View {
         VStack {
@@ -27,10 +24,8 @@ struct ProfileEditView: View {
             
             Form {
                 Section(header: Text("Kullanıcı Bilgileri")) {
-                    TextField("Username", text: $username)
-                    TextField("Email I’d", text: $email)
-                    TextField("Phone Number", text: $phoneNumber)
-                    SecureField("Password", text: $password)
+                    TextField("Kullanıcı Adı", text: $userSession.username)
+                    TextField("Email", text: $userSession.email)
                 }
             }
             .padding(.bottom, 20)
@@ -51,4 +46,5 @@ struct ProfileEditView: View {
 
 #Preview {
     ProfileEditView()
+        .environmentObject(UserSession())
 }

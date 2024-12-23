@@ -1,66 +1,76 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var userSession: UserSession
 
     var body: some View {
-        VStack {
-            headerView
-            userInfo
-            contentForm
-        }
-    }
-    
-    private var headerView: some View {
-        ZStack {
-            Color(red: 236/255, green: 220/255, blue: 104/255)
-                .ignoresSafeArea()
-            
+        NavigationView {
             VStack {
+                ZStack {
+                    Color(red: 236/255, green: 220/255, blue: 104/255)
+                        .ignoresSafeArea()
+                    
+                    VStack {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(.white)
+                            .padding(.top, 40)
+                    }
+                }
+                .frame(height: 200)
+                .padding(.bottom, 20)
+
+                // Kullanıcı Adı
+                Text("Merhaba, \(userSession.username)")
+                    .font(.title)
+                    .fontWeight(.semibold)
+
+                // Kullanıcı Bilgileri Formu
+                ZStack(alignment: .topTrailing) {
+                    Form {
+                        Section(header: Text("KULLANICI BILGILERI").font(.subheadline).fontWeight(.semibold).foregroundColor(.gray)) {
+                            HStack {
+                                Image(systemName: "person.fill")
+                                    .foregroundColor(.gray)
+                                // TextField için Binding kullanıyoruz
+                                TextField("Ad", text: $userSession.username)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                            }
+                            
+                            HStack {
+                                Image(systemName: "envelope.fill")
+                                    .foregroundColor(.gray)
+                                // TextField için Binding kullanıyoruz
+                                TextField("E-posta", text: $userSession.email)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .keyboardType(.emailAddress)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: UIScreen.main.bounds.width - 40, maxHeight: UIScreen.main.bounds.height / 1.5, alignment: .topLeading)
+                    .cornerRadius(12)
+                    
+                    // Kalem İkonu
+                    NavigationLink(destination: ProfileEditView()) {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                }
+
                 Spacer()
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .frame(width: 120, height: 120)
-                    .foregroundColor(.white)
-                    .padding(.bottom, 20)
+
+                // Çıkış Yap Buttonu
+                NavigationLink(destination: ContentView()) {
+                    Text("Çıkış Yap")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.red)
+                        .padding()
+                }
             }
-        }
-        .frame(height: 180)
-    }
-    
-    private var userInfo: some View {
-        Text("Merhaba, John")
-            .font(.title)
-            .padding(.top, 10)
-    }
-    
-    private var contentForm: some View {
-        Form {
-            Section(header: Text("Kullanıcı Bilgileri")) {
-                userInfoRow(imageName: "person", text: "John")
-                userInfoRow(imageName: "envelope", text: "john@example.com")
-            }
-            
-            Section(header: Text("İçerik")) {
-                navigationLinkRow(destination: Text("Kurslarım"), imageName: "book", text: "Kurslarım")
-                navigationLinkRow(destination: Text("Favoriler"), imageName: "heart", text: "Favoriler")
-                navigationLinkRow(destination: Text("İndirilenler"), imageName: "arrow.down.circle", text: "İndirilenler")
-            }
-        }
-    }
-    
-    private func userInfoRow(imageName: String, text: String) -> some View {
-        HStack {
-            Image(systemName: imageName)
-            Text(text)
-        }
-    }
-    
-    private func navigationLinkRow<Destination: View>(destination: Destination, imageName: String, text: String) -> some View {
-        NavigationLink(destination: destination) {
-            HStack {
-                Image(systemName: imageName)
-                Text(text)
-            }
+            .padding(.top)
         }
     }
 }
@@ -68,7 +78,7 @@ struct ProfileView: View {
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
-            .previewLayout(.sizeThatFits)
-            .padding()
+            .environmentObject(UserSession())
     }
 }
+

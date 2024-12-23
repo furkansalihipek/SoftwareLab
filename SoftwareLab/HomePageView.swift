@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct HomePageView: View {
+    @EnvironmentObject var userSession: UserSession
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                // Başlık
                 HStack {
-                    Text("Hoş Geldin JOHN")
+                    Text("Hoş Geldin \(userSession.username)")  // Kullanıcı adı burada görünecek
                         .font(.title)
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -37,7 +38,6 @@ struct HomePageView: View {
                         }
                     )
                 }
-                .buttonStyle(PlainButtonStyle()) // Navigasyon stilini sadeleştirir
 
                 // Python Kartı
                 NavigationLink(destination: PythonInspect()) {
@@ -52,10 +52,16 @@ struct HomePageView: View {
                         }
                     )
                 }
-                .buttonStyle(PlainButtonStyle())
             }
             .navigationTitle("Ana Sayfa")
             .navigationBarHidden(true)
+            .onAppear {
+                // Kullanıcı verisini çekmek için fetchUserData çağırıyoruz
+                if !userSession.isLoggedIn {
+                    // Eğer kullanıcı giriş yapmamışsa, giriş ekranına yönlendirebilirsiniz.
+                    print("Kullanıcı giriş yapmamış.")
+                }
+            }
         }
     }
 }
@@ -90,7 +96,7 @@ struct CardView: View {
                         .fontWeight(.bold)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color(red: 70/255, green: 115/255, blue: 161/255))
+                        .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
@@ -100,7 +106,7 @@ struct CardView: View {
                     .fontWeight(.bold)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color(red: 236/255, green: 220/255, blue: 104/255))
+                    .background(Color.yellow)
                     .foregroundColor(.black)
                     .cornerRadius(8)
             }
@@ -114,6 +120,6 @@ struct CardView: View {
 struct HomePageView_Previews: PreviewProvider {
     static var previews: some View {
         HomePageView()
+            .environmentObject(UserSession())  // UserSession'i Preview'e ekliyoruz
     }
 }
-
