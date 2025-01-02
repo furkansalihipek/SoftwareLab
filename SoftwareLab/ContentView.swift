@@ -26,99 +26,87 @@ struct ContentView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var username = ""
-    @State private var isLoginMode = true
+    @State var isLoginMode: Bool
     @State private var isLoading = false
     @State private var loginSuccess = false
-    
     @State private var showAlert = false
     @State private var alertMessage = ""
-
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                Spacer()
-                
-                Text(isLoginMode ? "Giriş Yap" : "Kayıt Ol")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 40)
-                
-                if !isLoginMode {
-                    TextField("Kullanıcı Adı", text: $username)
+        Group {
+            if !userSession.isLoggedIn {
+                VStack(spacing: 20) {
+                    Text(isLoginMode ? "Giriş Yap" : "Kayıt Ol")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.top, 50)
+                    
+                    if !isLoginMode {
+                        TextField("Kullanıcı Adı", text: $username)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(25)
+                            .padding(.horizontal, 30)
+                            .autocapitalization(.none)
+                    }
+                    
+                    TextField("E-posta", text: $email)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(25)
                         .padding(.horizontal, 30)
                         .autocapitalization(.none)
-                }
-                
-                TextField("E-posta", text: $email)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(25)
-                    .padding(.horizontal, 30)
-                    .autocapitalization(.none)
 
-                SecureField("Parola", text: $password)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(25)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 10)
-                    .autocapitalization(.none)
-                
-                Button(action: {
-                    isLoading = true
-                    if isLoginMode {
-                        login()
-                    } else {
-                        register()
-                    }
-                }) {
-                    Text(isLoginMode ? "Giriş Yap" : "Kayıt Ol")
-                        .foregroundColor(.white)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
+                    SecureField("Parola", text: $password)
                         .padding()
-                        .background(isLoginMode
-                                    ? Color(red: 236/255, green: 220/255, blue: 104/255)
-                                    : Color(red: 70/255, green: 115/255, blue: 161/255))
+                        .background(Color(.systemGray6))
                         .cornerRadius(25)
                         .padding(.horizontal, 30)
-                }
-                .padding(.top, 30)
-                .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Bilgi"), message: Text(alertMessage), dismissButton: .default(Text("Tamam")))
-                }
-                
-                if isLoading {
-                    ProgressView()
-                        .padding(.top, 20)
-                }
-                
-                Spacer()
-                
-                HStack {
-                    Text(isLoginMode ? "Hesabınız yok mu?" : "Zaten bir hesabınız var mı?")
-                        .foregroundColor(.gray)
+                        .padding(.top, 10)
+                        .autocapitalization(.none)
+                    
+                    Button(action: {
+                        isLoading = true
+                        if isLoginMode {
+                            login()
+                        } else {
+                            register()
+                        }
+                    }) {
+                        Text(isLoginMode ? "Giriş Yap" : "Kayıt Ol")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(isLoginMode
+                                        ? Color(red: 236/255, green: 220/255, blue: 104/255)
+                                        : Color(red: 70/255, green: 115/255, blue: 161/255))
+                            .cornerRadius(25)
+                            .padding(.horizontal, 30)
+                    }
+                    .padding(.top, 30)
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Bilgi"), message: Text(alertMessage), dismissButton: .default(Text("Tamam")))
+                    }
+                    
+                    if isLoading {
+                        ProgressView()
+                            .padding(.top, 20)
+                    }
                     
                     Button(action: {
                         isLoginMode.toggle()
                     }) {
-                        Text(isLoginMode ? "Kayıt Ol" : "Giriş Yap")
-                            .foregroundColor(isLoginMode
-                                            ? Color(red: 70/255, green: 115/255, blue: 161/255)
-                                            : Color(red: 236/255, green: 220/255, blue: 104/255))
-                            .fontWeight(.bold)
+                        Text(isLoginMode ? "Hesabın yok mu? Kayıt ol" : "Hesabın var mı? Giriş yap")
+                            .foregroundColor(.blue)
                     }
+                    .padding(.top)
                 }
-                .padding(.bottom, 40)
-                
-                NavigationLink(destination: HomePageView().environmentObject(userSession), isActive: $loginSuccess) {
-                    EmptyView()
-                }
+                .padding()
+            } else {
+                HomePageView()
+                    .environmentObject(userSession)
             }
-            .navigationBarHidden(false)
         }
     }
     
@@ -273,7 +261,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(isLoginMode: true)
             .environmentObject(UserSession())
     }
 }

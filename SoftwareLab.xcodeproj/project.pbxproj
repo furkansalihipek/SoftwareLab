@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		FC1F13B72D02F7DD001247D2 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = FC1F13B62D02F7DD001247D2 /* ConfettiSwiftUI */; };
 		FCCD942E2D138D6B002C0F8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCD942D2D138D6B002C0F8B /* User.swift */; };
-		FCDFFDD12D11F63E00602A93 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDFFDD02D11F63E00602A93 /* UserViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +33,6 @@
 		FC90ED942CC9178A009B7256 /* SoftwareLabTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoftwareLabTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC90ED9E2CC9178A009B7256 /* SoftwareLabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoftwareLabUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCCD942D2D138D6B002C0F8B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		FCDFFDD02D11F63E00602A93 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -84,7 +82,6 @@
 		FC90ED7B2CC91788009B7256 = {
 			isa = PBXGroup;
 			children = (
-				FCDFFDD02D11F63E00602A93 /* UserViewModel.swift */,
 				FCCD942D2D138D6B002C0F8B /* User.swift */,
 				FC90ED862CC91788009B7256 /* SoftwareLab */,
 				FC90ED972CC9178A009B7256 /* SoftwareLabTests */,
@@ -251,7 +248,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCDFFDD12D11F63E00602A93 /* UserViewModel.swift in Sources */,
 				FCCD942E2D138D6B002C0F8B /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
